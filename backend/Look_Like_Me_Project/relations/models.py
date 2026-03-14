@@ -17,6 +17,11 @@ class Friendship(models.Model):
         verbose_name='friendship request receiver',
     )
 
+    class StatusChoices(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        ACCEPTED = 'accepted', 'Accepted'
+        # 'declined' is not stored — record is deleted on decline
+        
     status = models.CharField(
         max_length=10, # for memory i guess
         choices=StatusChoices.choices,
@@ -25,11 +30,6 @@ class Friendship(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    
-    class StatusChoices(models.TextChoices):
-        PENDING = 'pending', 'Pending'
-        ACCEPTED = 'accepted', 'Accepted'
-        # 'declined' is not stored — record is deleted on decline
 
     class Meta:
         constraints = [
@@ -63,6 +63,10 @@ class MatchInteraction(models.Model):
         verbose_name='interaction receiver',
     )
 
+    class TypeChoices(models.TextChoices):
+        LIKE = 'like', 'Like'
+        SAVE = 'save', 'Save'
+
     type = models.CharField(
         max_length=4,
         choices=TypeChoices.choices,
@@ -77,9 +81,6 @@ class MatchInteraction(models.Model):
     )
 
 
-    class TypeChoices(models.TextChoices):
-        LIKE = 'like', 'Like'
-        SAVE = 'save', 'Save'
 
     class Meta:
         constraints = [

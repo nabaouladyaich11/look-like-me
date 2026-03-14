@@ -81,7 +81,7 @@ class Message(models.Model):
         indexes = [
             models.Index(
                 fields=['conversation', 'created_at'],
-                name='idx_messages_conversation_created',
+                name='idx_messages_conversation',
             ), # Composite index for the most common query:
                 # fetch all messages in a conversation ordered by time
         ]

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.core.validators import FileExtensionValidator
-from relations.models import Friendship
+# from relations.models import Friendship
 
 
 class User(AbstractBaseUser):
@@ -17,6 +17,10 @@ class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
     # password field is inherited from AbstractBaseUser
     # AbstractBaseUser stores it hashed automatically via set_password()
+
+    class GenderChoices(models.TextChoices):
+        MALE = 'male', 'Male'
+        FEMALE = 'female', 'Female'
 
     gender =models.CharField(
         max_length=6,
@@ -50,10 +54,6 @@ class User(AbstractBaseUser):
     # Required by AbstractBaseUser
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'gender', 'birth_date', 'country']
-
-    class GenderChoices(models.TextChoices):
-        MALE = 'male', 'Male'
-        FEMALE = 'female', 'Female'
         
 
     def __str__(self):

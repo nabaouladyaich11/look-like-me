@@ -7,7 +7,7 @@ class Image(models.Model):
     user = models.OneToOneField(
         User, 
         on_delete=models.CASCADE, 
-        verbose='image owner',
+        # verbose='image owner',
         related_name='images',
         )
     # verbose vs related_name: verbose is for human-readable admin display, related_name is for reverse lookups in code
