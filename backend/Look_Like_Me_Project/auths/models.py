@@ -27,10 +27,19 @@ class User(AbstractUser):
         FEMALE = 'female', 'Female'
 
     gender =models.CharField(
+        null=True,
+        blank=False,
         max_length=6,
         choices=GenderChoices.choices)
-    birth_date = models.DateField() # not datetime
-    country = models.CharField(max_length=100)
+    
+    birth_date = models.DateField(
+        null=True,
+        blank=False,
+    ) # not datetime
+    country = models.CharField(
+        max_length=100,
+        null=True,
+        blank=False,)
 
     profile_photo = models.ImageField( # so Django validates it's a real image
         upload_to='profile_photos/', 
@@ -41,7 +50,8 @@ class User(AbstractUser):
         )
     bio = models.TextField(
         max_length=300,
-        blank=True,
+        null=True,
+        blank=False,
         default='',
     )
 
