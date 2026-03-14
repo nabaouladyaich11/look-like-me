@@ -1,17 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
+from .managers import UserManager
 # from relations.models import Friendship
 
 
-class User(AbstractBaseUser):
+class User(AbstractUser):
     """
     Extending AbstractBaseUser instead of Model because:
     - It provides built-in password hashing (never store plain text passwords)
     - It integrates with Django's auth system (sessions, permissions, decorators)
     - It gives us `last_login` tracking for free
-    - AbstractBaseUser (vs AbstractUser) gives full control over required fields
+    - AbstractUser (vs AbstractBaseUser) gives shortcuts to required auth fields
     """
+
+    username = first_name = last_name = None
+
     name = models.CharField(max_length=200)
 
     email = models.EmailField(unique=True)
@@ -41,7 +45,8 @@ class User(AbstractBaseUser):
         default='',
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    
+    date_joined = models.DateTimeField(auto_now_add=True)
     # set once on creation, never updated
 
     # friends = models.ManyToManyField(
@@ -53,8 +58,22 @@ class User(AbstractBaseUser):
 
     # Required by AbstractBaseUser
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'gender', 'birth_date', 'country']
+    REQUIRED_FIELDS = ['name'] # what the admin must provide
+
+    objects = UserManager()
         
 
     def __str__(self):
         return self.name
+    
+    def get_full_name(self):
+        
+        
+        return str(self)
+
+
+    def get_short_name(self):
+        
+        return str(self)
+
+

@@ -35,7 +35,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,12 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'auths',
     'matches',
     'relations',
     'chats',
     'preferences',
 ]
+
+AUTH_USER_MODEL = 'auths.User' # replaces the default User model with our custom one
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,17 +91,17 @@ WSGI_APPLICATION = 'Look_Like_Me_Project.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         # 'ENGINE': 'django_postgres_extensions.backends.postgresql',
-#         "NAME": "look_like_me_db",
-#         "USER": "backend_dev",
-#         "PASSWORD": "RvNt5Yjzhg08Ha7o",
-#         "HOST": "localhost", #"db",  # set in docker-compose.yml
-#         "PORT": 5432,  # default postgres port
-#     }
-# }
+        # DATABASES = {
+        #     "default": {
+        #         "ENGINE": "django.db.backends.postgresql",
+        #         # 'ENGINE': 'django_postgres_extensions.backends.postgresql',
+        #         "NAME": "look_like_me_db",
+        #         "USER": "backend_dev",
+        #         "PASSWORD": "RvNt5Yjzhg08Ha7o",
+        #         "HOST": "localhost", #"db",  # set in docker-compose.yml
+        #         "PORT": 5432,  # default postgres port
+        #     }
+        # }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
