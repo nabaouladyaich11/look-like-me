@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
 from .managers import UserManager
-# from relations.models import Friendship
+import uuid
 
 
 class User(AbstractUser):
@@ -15,6 +15,8 @@ class User(AbstractUser):
     """
 
     username = first_name = last_name = None
+
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     name = models.CharField(max_length=200)
 

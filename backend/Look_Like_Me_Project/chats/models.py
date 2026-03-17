@@ -1,6 +1,6 @@
 from django.db import models
 from auths.models import User
-# Create your models here.
+import uuid
 
 class Conversation(models.Model):
     """
@@ -8,6 +8,7 @@ class Conversation(models.Model):
     Participants and messages hang off this via FK.
     Intentionally minimal: supports group chats later with no schema change.
     """
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -17,6 +18,8 @@ class Conversation(models.Model):
     
 
 class ConversationParticipant(models.Model):
+
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     
     conversation = models.ForeignKey(
         Conversation,
@@ -51,6 +54,9 @@ class ConversationParticipant(models.Model):
     
 
 class Message(models.Model):
+
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+
     conversation = models.ForeignKey(
         Conversation,
         on_delete=models.CASCADE, # deleting a conversation deletes all its messages

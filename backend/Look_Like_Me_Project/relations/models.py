@@ -1,8 +1,12 @@
 from django.db import models
 from auths.models import User
+import uuid
 
 # Create your models here.
 class Friendship(models.Model):
+
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+
     sender = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -21,7 +25,7 @@ class Friendship(models.Model):
         PENDING = 'pending', 'Pending'
         ACCEPTED = 'accepted', 'Accepted'
         # 'declined' is not stored — record is deleted on decline
-        
+
     status = models.CharField(
         max_length=10, # for memory i guess
         choices=StatusChoices.choices,
@@ -48,6 +52,8 @@ class MatchInteraction(models.Model):
     """
     Tracks likes and saves between users.
     """
+
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
     sender = models.ForeignKey(
         User,
@@ -97,6 +103,9 @@ class MatchInteraction(models.Model):
 
 
 class BlockedUser(models.Model):
+
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+
     sender = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

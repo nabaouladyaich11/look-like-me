@@ -1,9 +1,13 @@
 from django.db import models
 from auths.models import User
 from django.core.validators import FileExtensionValidator
+import uuid
 
 # Create your models here.
 class Image(models.Model):
+
+    uid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+
     user = models.OneToOneField(
         User, 
         on_delete=models.CASCADE, 
