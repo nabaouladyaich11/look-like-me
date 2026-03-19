@@ -36,13 +36,28 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
+    # defaults
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # APIs (DRF)
     'django_extensions',
+    'rest_framework',
+    'django_filters',
+
+    # Registration and authentication
+    'django.contrib.sites',
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+
+    # Project apps
     'auths',
     'matches',
     'relations',
@@ -52,7 +67,9 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'auths.User' # replaces the default User model with our custom one
 
+
 MIDDLEWARE = [
+    # defaults
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,6 +77,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # AUTHENTICATION
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -148,3 +168,65 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+# ACCESS TOKEN CRYPTION SETTINGS
+# FROM: https://dev.to/jenchen/django-rest-framework-with-simple-jwt-json-web-token-steps-on-how-to-sign-and-verify-using-the-192b
+
+SIGNING_KEY = os.getenv('SIGNING_KEY').replace("\\n", "\n")
+VERIFYING_KEY = os.getenv('VERIFYING_KEY').replace("\\n", "\n")
+
+SIMPLE_JWT = {
+
+    "ALGORITHM": "RS256",
+    "SIGNING_KEY": SIGNING_KEY,
+    "VERIFYING_KEY": VERIFYING_KEY,
+
+}
+
+# USER REGISTRATION & EMAIL CONFIRMATION & AUTHENTICATION SETTINGS
+# FROM: https://medium.com/@michal.drozdze/django-rest-framework-jwt-authentication-sign-up-api-with-email-confirmation-0cfc6054ce8e
+
+# django.contrib.sites
+SITE_ID = 1 # what is this for? needed for allauth, which is needed for registration and email confirmation
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+    ],
+    # Pagination allows to control how many objects per page are returned
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}
+
+# ALLAUTH SETTINGS
+ACCOUNT_EMAIL_VERIFICATION = "mandatory" # Require email confirmation
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1 # Confirmation link expires in 1 day
+LOGIN_URL = ""  # Path, users will be redirected to after email verification
+
+ACCOUNT_LOGIN_METHODS = {"email"}  # Use Email / Password authentication
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*'] # Fields marked with an asterisk (e.g. 'username*') are required
+ACCOUNT_EMAIL_VERIFICATION = "none" # Do not require email confirmation
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# Changed based on these WARNINGS:
+    # ?: settings.ACCOUNT_AUTHENTICATION_METHOD is deprecated, use: settings.ACCOUNT_LOGIN_METHODS = {'email'}
+    # ?: settings.ACCOUNT_EMAIL_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+    # ?: settings.ACCOUNT_USERNAME_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+
+# Custom serializer for registration (deleted username and added name fields)
+REST_AUTH = {
+    "REGISTER_SERIALIZER": "auths.serializers.CustomRegisterSerializer",
+}
+
+# EMAIL CONFIG
+# using Django SMTP
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') # email sending address
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+
