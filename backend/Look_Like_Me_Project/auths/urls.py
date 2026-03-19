@@ -3,6 +3,7 @@ from allauth.account.views import ConfirmEmailView
 
 urlpatterns = [
     # path("", include("django.contrib.auth.urls")),
+    path("", include("dj_rest_auth.urls")),
     re_path( # == Regex path
         "^api/v1/auth/registration/account-confirm-email/(?P<key>[-:\w]+)/$", # captures the trailing key part and names it 'key'
         ConfirmEmailView.as_view(),

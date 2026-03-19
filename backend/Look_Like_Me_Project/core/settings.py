@@ -15,6 +15,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+from datetime import timedelta
+
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,7 +57,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'dj_rest_auth',
     'dj_rest_auth.registration',
+    'rest_framework_simplejwt',
 
     # Project apps
     'auths',
@@ -199,6 +203,11 @@ REST_FRAMEWORK = {
     # Pagination allows to control how many objects per page are returned
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
+
+     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+     ]
 }
 
 # ALLAUTH SETTINGS
@@ -215,9 +224,18 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
     # ?: settings.ACCOUNT_EMAIL_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
     # ?: settings.ACCOUNT_USERNAME_REQUIRED is deprecated, use: settings.ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 
-# Custom serializer for registration (deleted username and added name fields)
+
+# dj-rest-auth
 REST_AUTH = {
     "REGISTER_SERIALIZER": "auths.serializers.CustomRegisterSerializer",
+    "USE_JWT": True,
+    "JWT_AUTH_HTTPONLY": False,  # Makes sure refresh token is sent
+}
+
+# djangorestframework-simplejwt
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
 }
 
 # EMAIL CONFIG
