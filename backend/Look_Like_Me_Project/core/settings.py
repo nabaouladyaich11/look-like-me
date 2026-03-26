@@ -213,11 +213,10 @@ REST_FRAMEWORK = {
 # ALLAUTH SETTINGS
 ACCOUNT_EMAIL_VERIFICATION = "mandatory" # Require email confirmation
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1 # Confirmation link expires in 1 day
-LOGIN_URL = ""  # Path, users will be redirected to after email verification
+LOGIN_URL = "/auths/login/"  # Path users will be redirected to after email verification
 
 ACCOUNT_LOGIN_METHODS = {"email"}  # Use Email / Password authentication
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*'] # Fields marked with an asterisk (e.g. 'username*') are required
-ACCOUNT_EMAIL_VERIFICATION = "none" # Do not require email confirmation
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # Changed based on these WARNINGS:
     # ?: settings.ACCOUNT_AUTHENTICATION_METHOD is deprecated, use: settings.ACCOUNT_LOGIN_METHODS = {'email'}
