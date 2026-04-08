@@ -1,6 +1,8 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 from allauth.account.adapter import get_adapter
+from .models import User
 
 class CustomRegisterSerializer(RegisterSerializer):
     username = None  # Remove username field
@@ -30,3 +32,11 @@ class CustomRegisterSerializer(RegisterSerializer):
 
         # self.custom_signup(request, user)
         return user
+    
+
+
+class CustomUserDetailsSerializer(UserDetailsSerializer):
+
+    class Meta:
+        model = User
+        fields = ('uid', 'email', 'name')

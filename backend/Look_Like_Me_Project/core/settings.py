@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',  # For logout
 
     # Project apps
     'auths',
@@ -206,7 +207,8 @@ REST_FRAMEWORK = {
 
      'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'django.contrib.auth.backends.ModelBackend', #Default authentication backend, needed for admin
      ]
 }
 
@@ -227,14 +229,20 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # dj-rest-auth
 REST_AUTH = {
     "REGISTER_SERIALIZER": "auths.serializers.CustomRegisterSerializer",
+    "USER_DETAILS_SERIALIZER":"auths.serializers.CustomUserDetailsSerializer",
     "USE_JWT": True,
-    "JWT_AUTH_HTTPONLY": False,  # Makes sure refresh token is sent
+    "JWT_AUTH_HTTPONLY": False,  # Makes sure refresh token is sent within response body, not as an httpOnly cookie
+    "REST_SESSION_LOGIN": False, # Disable session cookies
+        # OLD_PASSWORD_FIELD_ENABLED - set it to True if you want to have old password verification on password change enpoint (default: False)
+        # LOGOUT_ON_PASSWORD_CHANGE - set to False if you want to keep the current user logged in after a password change
 }
 
 # djangorestframework-simplejwt
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
+    "ROTATE_REFRESH_TOKENS": True, # when using refreshToken endpoint, both new access and refresh tokens are issued
+    "BLACKLIST_AFTER_ROTATION": True, # when using refreshToken endpoint, the old refresh token is added to blacklist
 }
 
 # EMAIL CONFIG
