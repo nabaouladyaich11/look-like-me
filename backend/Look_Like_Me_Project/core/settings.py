@@ -62,6 +62,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',  # For logout
 
+    'knox',
+
     # Project apps
     'auths',
     'matches',
@@ -206,7 +208,8 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 10,
 
      'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+         'knox.auth.TokenAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         'django.contrib.auth.backends.ModelBackend', #Default authentication backend, needed for admin
      ]
@@ -230,6 +233,7 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 REST_AUTH = {
     "REGISTER_SERIALIZER": "auths.serializers.CustomRegisterSerializer",
     "USER_DETAILS_SERIALIZER":"auths.serializers.CustomUserDetailsSerializer",
+    'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
     "USE_JWT": True,
     "JWT_AUTH_HTTPONLY": False,  # Makes sure refresh token is sent within response body, not as an httpOnly cookie
     "REST_SESSION_LOGIN": False, # Disable session cookies

@@ -1,9 +1,14 @@
 from django.urls import include, path, re_path
 from allauth.account.views import ConfirmEmailView
+from .views import LoginView, LogoutView, LogoutAllView
 
 urlpatterns = [
     # path("", include("django.contrib.auth.urls")),
-    path("", include("dj_rest_auth.urls")),
+    # path("", include("dj_rest_auth.urls")),
+    path('login/', LoginView.as_view(), name='knox_login'),
+    path('logout/', LogoutView.as_view(), name='knox_logout'),
+    path('logoutall/', LogoutAllView.as_view(), name='knox_logoutall'),
+    # path("", include("knox.urls")),
     re_path( # == Regex path
         "^registration/account-confirm-email/(?P<key>[-:\w]+)/$", # captures the trailing key part and names it 'key'
         ConfirmEmailView.as_view(),
