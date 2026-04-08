@@ -209,7 +209,6 @@ REST_FRAMEWORK = {
 
      'DEFAULT_AUTHENTICATION_CLASSES': [
          'knox.auth.TokenAuthentication',
-        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         'django.contrib.auth.backends.ModelBackend', #Default authentication backend, needed for admin
      ]
@@ -235,38 +234,19 @@ REST_AUTH = {
     "USER_DETAILS_SERIALIZER":"auths.serializers.CustomUserDetailsSerializer",
     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
     'TOKEN_MODEL': 'knox.models.AuthToken',
-    # "USE_JWT": True,
-    # "JWT_AUTH_HTTPONLY": False,  # Makes sure refresh token is sent within response body, not as an httpOnly cookie
     "REST_SESSION_LOGIN": False, # Disable session cookies
         # OLD_PASSWORD_FIELD_ENABLED - set it to True if you want to have old password verification on password change enpoint (default: False)
         # LOGOUT_ON_PASSWORD_CHANGE - set to False if you want to keep the current user logged in after a password change
 }
 
 
-KNOX_TOKEN_MODEL = 'knox.AuthToken'
-
 REST_KNOX = {
-#   'SECURE_HASH_ALGORITHM': 'hashlib.sha512',
-#   'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-#   'TOKEN_TTL': timedelta(hours=10),
-  'USER_SERIALIZER': 'knox.serializers.UserSerializer',
+#   'TOKEN_TTL': timedelta(hours=10), # Expired tokens are automatically removed from the system.
+  'USER_SERIALIZER': 'auths.serializers.CustomUserDetailsSerializer',
   'TOKEN_LIMIT_PER_USER': None,
-#   'AUTO_REFRESH': False,
-#   'AUTO_REFRESH_MAX_TTL': None,
-  'MIN_REFRESH_INTERVAL': 60,
-#   'AUTH_HEADER_PREFIX': 'Token',
-#   'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
-  'TOKEN_MODEL': 'knox.AuthToken',
+
 }
 
-
-# # djangorestframework-simplejwt
-# SIMPLE_JWT = {
-#     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
-#     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
-#     "ROTATE_REFRESH_TOKENS": True, # when using refreshToken endpoint, both new access and refresh tokens are issued
-#     "BLACKLIST_AFTER_ROTATION": True, # when using refreshToken endpoint, the old refresh token is added to blacklist
-# }
 
 # EMAIL CONFIG
 # using Django SMTP

@@ -3,8 +3,6 @@ from allauth.account.views import ConfirmEmailView
 from .views import LoginView, LogoutView, LogoutAllView
 
 urlpatterns = [
-    # path("", include("django.contrib.auth.urls")),
-    # path("", include("dj_rest_auth.urls")),
     path('login/', LoginView.as_view(), name='knox_login'),
     path('logout/', LogoutView.as_view(), name='knox_logout'),
     path('logoutall/', LogoutAllView.as_view(), name='knox_logoutall'),

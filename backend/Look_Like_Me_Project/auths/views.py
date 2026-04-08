@@ -35,11 +35,11 @@ class LoginView(LoginView):
         login(request, user)
         return super(LoginView, self).post(request, format=format)
 
-    def get_post_response_data(self, request, token, instance):
+    # def get_post_response_data(self, request, token, instance):
         
-        data = super().get_post_response_data(request, token, instance)
-        data['user'] = CustomUserDetailsSerializer(request.user, context={'request': request}).data
-        return data
+    #     data = super().get_post_response_data(request, token, instance)
+    #     data['user'] = CustomUserDetailsSerializer(request.user, context={'request': request}).data
+    #     return data
 
 
 
