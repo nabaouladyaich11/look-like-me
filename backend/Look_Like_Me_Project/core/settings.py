@@ -211,11 +211,24 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
 
-     'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'knox.auth.TokenAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         'django.contrib.auth.backends.ModelBackend', #Default authentication backend, needed for admin
-     ]
+     ],
+
+    # Rate limiting. FROM https://dj-rest-auth.readthedocs.io/en/latest/guides/user-profiles/?h=rate#rate-limiting-login-attempts
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'dj_rest_auth': '20/hour',
+        'login': '10/hour',
+    },
+
+    # to make responses consistent in keys
+    'NON_FIELD_ERRORS_KEY': 'detail',
+
 }
 
 # ALLAUTH SETTINGS

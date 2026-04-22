@@ -30,6 +30,9 @@ class LoginView(LoginView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.AllowAny,]
 
+    # rate limiting by DRF & dj-rest-auth
+    throttle_scope = 'login'
+
     def post(self, request, format=None):
         serializer = LoginSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
