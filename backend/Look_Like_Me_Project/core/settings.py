@@ -38,6 +38,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
+    # admin contexts grouping
+        # FROM https://www.youtube.com/watch?v=uYXMzVa6VVg&list=WL&index=2&t=112s
+    'django_admin_contexts',
+
     # defaults
     'django.contrib.admin',
     'django.contrib.auth',
@@ -94,7 +98,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -208,7 +212,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 10,
 
      'DEFAULT_AUTHENTICATION_CLASSES': [
-         'knox.auth.TokenAuthentication',
+        'knox.auth.TokenAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         'django.contrib.auth.backends.ModelBackend', #Default authentication backend, needed for admin
      ]
@@ -218,6 +222,9 @@ REST_FRAMEWORK = {
 ACCOUNT_EMAIL_VERIFICATION = "mandatory" # Require email confirmation
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1 # Confirmation link expires in 1 day
 LOGIN_URL = "/auths/login/"  # Path users will be redirected to after email verification
+ACCOUNT_EMAIL_SUBJECT_PREFIX = None
+
+ACCOUNT_ADAPTER = "auths.adapters.CustomAllauthAccountAdapter"
 
 ACCOUNT_LOGIN_METHODS = {"email"}  # Use Email / Password authentication
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*'] # Fields marked with an asterisk (e.g. 'username*') are required

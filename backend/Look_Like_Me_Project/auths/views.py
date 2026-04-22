@@ -15,9 +15,11 @@ from dj_rest_auth.serializers import LoginSerializer
 # knox imports
 from knox.views import LoginView, LogoutView, LogoutAllView
 from knox.auth import TokenAuthentication
+from django.contrib.auth.backends import ModelBackend
 
 # local apps import
 from .serializers import CustomUserDetailsSerializer
+from globals.mixins import KnoxTokenOnlyMixin
         
 
 
@@ -25,8 +27,8 @@ from .serializers import CustomUserDetailsSerializer
 
 class LoginView(LoginView):
     # login view extending KnoxLoginView
-
-    permission_classes = (permissions.AllowAny,)
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.AllowAny,]
 
     def post(self, request, format=None):
         serializer = LoginSerializer(data=request.data, context={'request': request})
