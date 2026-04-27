@@ -7,6 +7,7 @@ from .models import User
 
 class CustomRegisterSerializer(RegisterSerializer):
     "inherit FROM https://github.com/iMerica/dj-rest-auth/blob/master/dj_rest_auth/registration/serializers.py#L233"
+    
     username = None  # Remove username field
     email = serializers.EmailField(
         required=_signup_field_required('email'),
@@ -15,6 +16,24 @@ class CustomRegisterSerializer(RegisterSerializer):
 )
 
     name = serializers.CharField(required=True)
+
+
+    gender = serializers.ChoiceField(
+        choices=User.GenderChoices.choices,
+        required=False,
+        allow_null=True,
+    )
+
+    birth_date = serializers.DateField(
+        required=False,
+        allow_null=True,
+    )
+
+    country = serializers.CharField(
+        max_length=100,
+        required=False,
+        allow_null=True,
+    )
 
     def validate_password1(self, password):
 
@@ -47,11 +66,24 @@ class CustomRegisterSerializer(RegisterSerializer):
 
         return super().validate_password1(password)
         
+    
+    def validate_birth_date(self, value):
+        from datetime import date
+        if value >= date.today():
+            raise serializers.ValidationError("Birth date must be in the past.")
+        if value.year < 1900:
+            raise serializers.ValidationError("Enter a valid birth date.")
+        return value
+
+
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
         data.update({
             'name': self.validated_data.get('name', ''),
+            'gender': self.validated_data.get('gender', None),
+            'birth_date': self.validated_data.get('birth_date', None),
+            'country': self.validated_data.get('country', None),
 
         })
         return data
@@ -62,7 +94,12 @@ class CustomRegisterSerializer(RegisterSerializer):
         self.cleaned_data = self.get_cleaned_data()
 
         user = adapter.save_user(request, user, self, commit=False)
+
         user.name = self.cleaned_data.get('name')
+        user.gender = self.cleaned_data.get('gender')
+        user.birth_date = self.cleaned_data.get('birth_date')
+        user.country = self.cleaned_data.get('country')
+
         user.save()
 
         # # Create profile with extra fields
