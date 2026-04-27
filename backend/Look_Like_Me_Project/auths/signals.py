@@ -1,22 +1,11 @@
-# FROM Source - https://stackoverflow.com/a/24809190
-# Posted by Gravity Grave, modified by community. See post 'Timeline' for change history
-# Retrieved 2026-04-27, License - CC BY-SA 3.0
 
-from allauth.account.signals import email_confirmation_sent, user_signed_up, email_confirmed
+from allauth.account.signals import email_confirmed, email_confirmation_sent  # instead of user_signed_up, because it directs to a non-existing template
 from django.dispatch import receiver
 from allauth.account.models import EmailAddress
 
 from .models import User
 
-# @receiver(email_confirmation_sent, sender=EmailAddress)
-# def user_signed_up_(request, email_address, **kwargs):
-
-#     user = User.objects.get(email=email_address.email)
-#     user.is_active = False
-
-#     user.save()
-
-from allauth.account.models import EmailConfirmationHMAC
+from allauth.account.models import EmailConfirmationHMAC # has-based message auth, does NOT rely on DB records
 
 @receiver(email_confirmation_sent, sender=EmailConfirmationHMAC)
 def deactivate_on_confirmation_sent(request, confirmation, signup, **kwargs):
@@ -28,8 +17,6 @@ def deactivate_on_confirmation_sent(request, confirmation, signup, **kwargs):
 
 
 # FROM Source - https://stackoverflow.com/a/24817474
-# Posted by Gravity Grave
-# Retrieved 2026-04-27, License - CC BY-SA 3.0
 
 @receiver(email_confirmed, sender=EmailAddress)
 def email_confirmed_(request, email_address, **kwargs):
