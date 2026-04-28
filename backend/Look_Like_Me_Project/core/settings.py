@@ -181,19 +181,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-# ACCESS TOKEN CRYPTION SETTINGS
-# FROM: https://dev.to/jenchen/django-rest-framework-with-simple-jwt-json-web-token-steps-on-how-to-sign-and-verify-using-the-192b
-
-SIGNING_KEY = os.getenv('SIGNING_KEY').replace("\\n", "\n")
-VERIFYING_KEY = os.getenv('VERIFYING_KEY').replace("\\n", "\n")
-
-SIMPLE_JWT = {
-
-    "ALGORITHM": "RS256",
-    "SIGNING_KEY": SIGNING_KEY,
-    "VERIFYING_KEY": VERIFYING_KEY,
-
-}
 
 # USER REGISTRATION & EMAIL CONFIRMATION & AUTHENTICATION SETTINGS
 # FROM: https://medium.com/@michal.drozdze/django-rest-framework-jwt-authentication-sign-up-api-with-email-confirmation-0cfc6054ce8e
