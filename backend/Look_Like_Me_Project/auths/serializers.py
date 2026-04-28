@@ -112,8 +112,25 @@ class CustomRegisterSerializer(RegisterSerializer):
     
 
 
-class CustomUserDetailsSerializer(UserDetailsSerializer):
+class CustomUserDetailsSerializer(UserDetailsSerializer): # Returned login response
 
     class Meta:
         model = User
         fields = ('uid', 'email', 'name')
+
+
+
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
+
+    extra_kwargs = {
+        'email': {'read_only': True}, # email is read-only, can't be updated
+    }
+    class Meta:
+        model = User
+        fields = ('uid', 'name', 'email', 'gender', 'birth_date', 'country', 'profile_photo', 'bio')
+
+        extra_kwargs = {
+            'email': {'read_only': True}, # email is read-only, can't be updated
+            'name': {'required': False}, # name is required
+        }
+        
